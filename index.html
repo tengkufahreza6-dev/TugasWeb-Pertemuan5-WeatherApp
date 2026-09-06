@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App — Tugas Rutin 5</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌤️</text></svg>">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1><i class="fa-solid fa-cloud-sun"></i> Weather App</h1>
+      <button id="unit-toggle-btn" class="unit-toggle" aria-label="Toggle Unit">Ubah ke °F</button>
+    </header>
+
+    <form id="search-form" class="search-form">
+      <div class="input-group">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="city-input" placeholder="Masukkan nama kota (cth: Medan, Jakarta)..." autocomplete="off">
+        <div class="action-buttons">
+          <button type="button" id="location-btn" class="btn-action" title="Gunakan Lokasi Saya">
+            <i class="fa-solid fa-location-crosshairs"></i>
+          </button>
+          <button type="submit" id="search-btn" class="btn-action btn-primary" title="Cari Kota">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div id="history-container" class="history-container hidden">
+      <span class="history-label">Pencarian Terakhir:</span>
+      <div id="history-tags" class="history-tags"></div>
+    </div>
+
+    <div id="loading-spinner" class="state-container hidden">
+      <div class="spinner"></div>
+      <p>Mengambil data cuaca...</p>
+    </div>
+
+    <div id="error-message" class="state-container error-box hidden">
+      <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+      <p id="error-text">Kota tidak ditemukan.</p>
+    </div>
+
+    <main id="weather-card" class="weather-card hidden">
+      <div class="weather-layout-grid">
+        <div class="weather-main-col">
+          <div class="location-box">
+            <h2 id="city-name">Medan, ID</h2>
+            <p id="weather-date">Minggu, 18 Mei 2026</p>
+          </div>
+          <div class="temp-box">
+            <img id="weather-icon" src="" alt="Weather Icon">
+            <div class="temp-value">
+              <span id="temperature">28</span><span id="temp-unit">°C</span>
+            </div>
+          </div>
+          <p id="weather-description" class="weather-desc">Cerah Berawan</p>
+        </div>
+
+        <div class="weather-side-col">
+          <div class="weather-details">
+            <div class="detail-item">
+              <i class="fa-solid fa-droplet"></i>
+              <div>
+                <span class="detail-label">Kelembaban</span>
+                <span id="humidity" class="detail-val">75%</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <i class="fa-solid fa-wind"></i>
+              <div>
+                <span class="detail-label">Kecepatan Angin</span>
+                <span id="wind-speed" class="detail-val">3.6 m/s</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <i class="fa-solid fa-temperature-three-quarters"></i>
+              <div>
+                <span class="detail-label">Suhu Terasa</span>
+                <span id="feels-like" class="detail-val">30°C</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="forecast-section">
+            <h3>Prakiraan 5 Hari Ke Depan</h3>
+            <div id="forecast-container" class="forecast-container"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
