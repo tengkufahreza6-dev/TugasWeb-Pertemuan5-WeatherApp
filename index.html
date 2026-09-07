@@ -12,32 +12,48 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌤️</text></svg>">
 </head>
 <body>
-  <div class="app-container">
-    <header class="app-header">
-      <h1><i class="fa-solid fa-cloud-sun"></i> Weather App</h1>
-      <button id="unit-toggle-btn" class="unit-toggle" aria-label="Toggle Unit">Ubah ke °F</button>
-    </header>
 
-    <form id="search-form" class="search-form">
-      <div class="input-group">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="city-input" placeholder="Masukkan nama kota (cth: Medan, Jakarta)..." autocomplete="off">
-        <div class="action-buttons">
-          <button type="button" id="location-btn" class="btn-action" title="Gunakan Lokasi Saya">
-            <i class="fa-solid fa-location-crosshairs"></i>
-          </button>
-          <button type="submit" id="search-btn" class="btn-action btn-primary" title="Cari Kota">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+  <!-- HEADER UTAMA -->
+  <header class="main-header">
+    <div class="header-container">
+      
+      <div class="brand">
+        <i class="fa-solid fa-cloud-sun brand-icon"></i>
+        <h1>WeatherApp</h1>
+      </div>
+
+      <!-- Area Search Form & History Terintegrasi Persis Di Dalam Container Tengah -->
+      <div class="search-form-wrapper">
+        <form id="search-form" class="header-search-form">
+          <div class="input-group">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="city-input" placeholder="Masukkan nama kota (cth: Medan, Jakarta)..." autocomplete="off">
+            <div class="action-buttons">
+              <button type="button" id="location-btn" class="btn-action" title="Gunakan Lokasi Saya">
+                <i class="fa-solid fa-location-crosshairs"></i>
+              </button>
+              <button type="submit" id="search-btn" class="btn-action btn-primary" title="Cari Kota">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Riwayat Pencarian Berada Tepat di Bawah Kolom Input -->
+        <div id="history-container" class="history-container hidden">
+          <span class="history-label">Terakhir:</span>
+          <div id="history-tags" class="history-tags"></div>
         </div>
       </div>
-    </form>
 
-    <div id="history-container" class="history-container hidden">
-      <span class="history-label">Pencarian Terakhir:</span>
-      <div id="history-tags" class="history-tags"></div>
+      <button id="unit-toggle-btn" class="unit-toggle" aria-label="Toggle Unit">Ubah ke °F</button>
     </div>
+  </header>
 
+  <!-- VIEWPORT UTAMA KARTU CUACA -->
+  <main class="main-viewport">
+    
+    <!-- State Loading & Error -->
     <div id="loading-spinner" class="state-container hidden">
       <div class="spinner"></div>
       <p>Mengambil data cuaca...</p>
@@ -48,8 +64,10 @@
       <p id="error-text">Kota tidak ditemukan.</p>
     </div>
 
-    <main id="weather-card" class="weather-card hidden">
+    <!-- Card Utama Cuaca -->
+    <div id="weather-card" class="app-container hidden">
       <div class="weather-layout-grid">
+        
         <div class="weather-main-col">
           <div class="location-box">
             <h2 id="city-name">Medan, ID</h2>
@@ -94,9 +112,16 @@
             <div id="forecast-container" class="forecast-container"></div>
           </div>
         </div>
+
       </div>
-    </main>
-  </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER APLIKASI -->
+  <footer class="main-footer">
+    <p>&copy; 2026 WeatherApp — Tugas Rutin 5 Pemrograman Web (PSIK 25B UNIMED)</p>
+  </footer>
 
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>

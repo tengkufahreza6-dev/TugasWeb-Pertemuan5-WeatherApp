@@ -9,9 +9,7 @@ body {
   color: #f8fafc;
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
+  flex-direction: column;
   background-color: #0f172a;
   background-size: cover;
   background-position: center;
@@ -20,6 +18,7 @@ body {
   position: relative;
 }
 
+/* Mencerahkan dan Pertajam Gambar Latar Belakang Cuaca (Body) */
 body::before {
   content: '';
   position: absolute;
@@ -27,25 +26,215 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.6);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
+  /* Turunkan tingkat kepekatan warna hitam dari 0.65 menjadi 0.15 agar foto jauh lebih cerah */
+  background: rgba(15, 23, 42, 0.15); 
+  /* Hapus efek blur agar foto landscape cuaca tampil tajam & jernih */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   z-index: 0;
 }
 
-.app-container {
+/* Background Dynamic Weather Themes */
+body.theme-clear { background-image: url('https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1920&auto=format&fit=crop'); }
+body.theme-clouds { background-image: url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1920&auto=format&fit=crop'); }
+body.theme-rain { background-image: url('https://images.unsplash.com/photo-1519692933481-e162a57d6721?q=80&w=1920&auto=format&fit=crop'); }
+body.theme-thunderstorm { background-image: url('https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?q=80&w=1920&auto=format&fit=crop'); }
+body.theme-snow { background-image: url('https://images.unsplash.com/photo-1517299321529-639fecd1227b?q=80&w=1920&auto=format&fit=crop'); }
+body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo-1487621167305-5d248087c724?q=80&w=1920&auto=format&fit=crop'); }
+
+/* HEADER UTAMA TIPIS & PRESISI */
+.main-header {
+  position: relative;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.88);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.6rem 0;
+}
+
+.header-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-icon {
+  font-size: 1.25rem;
+  color: #38bdf8;
+}
+
+.brand h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.search-form-wrapper {
+  flex: 1;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-search-form {
+  width: 100%;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: #94a3b8;
+  z-index: 2;
+  font-size: 0.85rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.55rem 5.5rem 0.55rem 2.2rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: #38bdf8;
+}
+
+.action-buttons {
+  position: absolute;
+  right: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  z-index: 2;
+}
+
+.btn-action {
+  background: #334155;
+  color: #38bdf8;
+  border: 1px solid #475569;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-action:hover {
+  background: #475569;
+  color: #ffffff;
+}
+
+.btn-action.btn-primary {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.unit-toggle {
+  background: #334155;
+  color: #f8fafc;
+  border: 1px solid #475569;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.unit-toggle:hover {
+  background: #475569;
+}
+
+/* RIWAYAT PENCARIAN TERINTEGRASI DI HEADER */
+.history-container {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-left: 0.1rem;
+}
+
+.history-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.history-tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.history-tag {
+  background: rgba(51, 65, 85, 0.8);
+  color: #e2e8f0;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease;
+}
+
+.history-tag:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+/* VIEWPORT UTAMA */
+.main-viewport {
   position: relative;
   z-index: 1;
-  background: rgba(15, 23, 42, 0.8);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+/* KARTU UTAMA APLIKASI */
+.app-container {
+  background: rgba(15, 23, 42, 0.85);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.75rem;
   width: 100%;
   max-width: 800px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-  transition: all 0.3s ease;
 }
 
 .weather-layout-grid {
@@ -67,178 +256,8 @@ body::before {
   gap: 1.25rem;
 }
 
-/* Dynamic HD Background Themes */
-body.theme-clear {
-  background-image: url('https://images.unsplash.com/photo-1601297183305-6df142704ea2?q=80&w=1920&auto=format&fit=crop');
-}
-
-body.theme-clouds {
-  background-image: url('https://images.unsplash.com/photo-1534088568595-a066f410bcda?q=80&w=1920&auto=format&fit=crop');
-}
-
-body.theme-rain {
-  background-image: url('https://images.unsplash.com/photo-1519692933481-e162a57d6721?q=80&w=1920&auto=format&fit=crop');
-}
-
-body.theme-thunderstorm {
-  background-image: url('https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?q=80&w=1920&auto=format&fit=crop');
-}
-
-body.theme-snow {
-  background-image: url('https://images.unsplash.com/photo-1517299321529-639fecd1227b?q=80&w=1920&auto=format&fit=crop');
-}
-
-body.theme-atmosphere {
-  background-image: url('https://images.unsplash.com/photo-1487621167305-5d248087c724?q=80&w=1920&auto=format&fit=crop');
-}
-
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.app-header h1 {
-  font-size: 1.35rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #38bdf8;
-}
-
-.unit-toggle {
-  background: #334155;
-  color: #f8fafc;
-  border: 1px solid #475569;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.unit-toggle:hover {
-  background: #475569;
-}
-
-.search-form {
-  margin-bottom: 1rem;
-}
-
-.input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  color: #94a3b8;
-  z-index: 2;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 0.85rem 6.2rem 0.85rem 2.8rem;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  color: #f8fafc;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-.input-group input:focus {
-  border-color: #38bdf8;
-}
-
-.action-buttons {
-  position: absolute;
-  right: 0.4rem;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  z-index: 2;
-}
-
-.btn-action {
-  background: #334155;
-  color: #38bdf8;
-  border: 1px solid #475569;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-}
-
-.btn-action:hover {
-  background: #475569;
-  color: #ffffff;
-}
-
-.btn-action.btn-primary {
-  background: #0284c7;
-  color: #ffffff;
-  border-color: #0284c7;
-}
-
-.btn-action.btn-primary:hover {
-  background: #0369a1;
-  border-color: #0369a1;
-}
-
-.history-container {
-  margin-bottom: 1.5rem;
-}
-
-.history-label {
-  font-size: 0.75rem;
-  color: #94a3b8;
-  display: block;
-  margin-bottom: 0.4rem;
-}
-
-.history-tags {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.history-tag {
-  background: #334155;
-  color: #e2e8f0;
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  border: none;
-  transition: background 0.2s ease;
-}
-
-.history-tag:hover {
-  background: #0284c7;
-}
-
-.location-box h2 {
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-
-.location-box p {
-  color: #94a3b8;
-  font-size: 0.85rem;
-  margin-top: 0.2rem;
-}
+.location-box h2 { font-size: 1.5rem; font-weight: 600; }
+.location-box p { color: #94a3b8; font-size: 0.85rem; margin-top: 0.2rem; }
 
 .temp-box {
   display: flex;
@@ -247,16 +266,8 @@ body.theme-atmosphere {
   margin: 0.5rem 0;
 }
 
-.temp-value {
-  font-size: 3rem;
-  font-weight: 700;
-}
-
-.weather-desc {
-  text-transform: capitalize;
-  font-size: 1.1rem;
-  color: #cbd5e1;
-}
+.temp-value { font-size: 3rem; font-weight: 700; }
+.weather-desc { text-transform: capitalize; font-size: 1.1rem; color: #cbd5e1; }
 
 .weather-details {
   display: grid;
@@ -268,41 +279,13 @@ body.theme-atmosphere {
   border: 1px solid #334155;
 }
 
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
+.detail-item { display: flex; align-items: center; gap: 0.6rem; }
+.detail-item i { font-size: 1.2rem; color: #38bdf8; }
+.detail-label { display: block; font-size: 0.7rem; color: #94a3b8; }
+.detail-val { font-size: 0.85rem; font-weight: 600; }
 
-.detail-item i {
-  font-size: 1.2rem;
-  color: #38bdf8;
-}
-
-.detail-label {
-  display: block;
-  font-size: 0.7rem;
-  color: #94a3b8;
-}
-
-.detail-val {
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.forecast-section h3 {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: #cbd5e1;
-}
-
-.forecast-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.5rem;
-  align-items: stretch;
-}
+.forecast-section h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #cbd5e1; }
+.forecast-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
 
 .forecast-card {
   background: rgba(15, 23, 42, 0.6);
@@ -322,67 +305,62 @@ body.theme-atmosphere {
   background: rgba(30, 41, 59, 0.8);
 }
 
-.forecast-day {
-  font-size: 0.75rem;
-  color: #cbd5e1;
-  font-weight: 600;
-}
-
+/* MENAMPILKAN WARNA ASLI GAMBAR IKON TANPA MANIPULASI FILTER */
 .temp-box img,
 .forecast-card img {
   width: 64px;
   height: 64px;
   object-fit: contain;
-  filter: saturate(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.25));
-  transition: transform 0.2s ease;
+  -webkit-filter: none;
+   filter: none;
 }
 
-.forecast-card:hover img {
-  transform: scale(1.1);
-}
+.forecast-day { font-size: 0.75rem; color: #cbd5e1; font-weight: 600; }
+.forecast-temp { font-size: 0.85rem; font-weight: 700; }
 
-.forecast-temp {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #f8fafc;
-}
-
-.state-container {
+/* FOOTER APLIKASI */
+.main-footer {
+  position: relative;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.85rem;
   text-align: center;
-  padding: 2rem 0;
+  font-size: 0.75rem;
+  color: #64748b;
 }
 
+/* STATES */
+.state-container { text-align: center; padding: 2rem 0; }
 .spinner {
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   border: 4px solid rgba(255, 255, 255, 0.1);
   border-left-color: #38bdf8;
   border-radius: 50%;
+  -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
   margin: 0 auto 0.75rem auto;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@-webkit-keyframes spin { to { -webkit-transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.error-box {
-  color: #f87171;
-}
+.error-box { color: #f87171; }
+.hidden { display: none !important; }
 
-.error-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 640px) {
-  .app-container {
+/* MEDIA QUERIES MOBILE */
+@media (max-width: 680px) {
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .search-form-wrapper {
     max-width: 100%;
-    padding: 1.25rem;
+    width: 100%;
   }
 
   .weather-layout-grid {
