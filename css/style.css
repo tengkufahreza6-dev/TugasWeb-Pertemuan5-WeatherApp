@@ -26,9 +26,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  /* Turunkan tingkat kepekatan warna hitam dari 0.65 menjadi 0.15 agar foto jauh lebih cerah */
   background: rgba(15, 23, 42, 0.15); 
-  /* Hapus efek blur agar foto landscape cuaca tampil tajam & jernih */
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
   z-index: 0;
@@ -220,21 +218,22 @@ body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1.5rem 1rem;
   width: 100%;
 }
 
-/* KARTU UTAMA APLIKASI */
+/* KARTU UTAMA DENGAN TRANSPARANSI GLASSMORPHISM */
 .app-container {
-  background: rgba(15, 23, 42, 0.85);
+  /* Turunkan opacity background dari 0.85 ke 0.55 */
+  background: rgba(15, 23, 42, 0.40);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
   padding: 1.75rem;
   width: 100%;
   max-width: 800px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .weather-layout-grid {
@@ -254,9 +253,10 @@ body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-width: 0; /* Mencegah Grid Child Meluap */
 }
 
-.location-box h2 { font-size: 1.5rem; font-weight: 600; }
+.location-box h2 { font-size: 1.5rem; font-weight: 600; word-break: break-word; }
 .location-box p { color: #94a3b8; font-size: 0.85rem; margin-top: 0.2rem; }
 
 .temp-box {
@@ -285,7 +285,11 @@ body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo
 .detail-val { font-size: 0.85rem; font-weight: 600; }
 
 .forecast-section h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #cbd5e1; }
-.forecast-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+.forecast-container { 
+  display: grid; 
+  grid-template-columns: repeat(5, 1fr); 
+  gap: 0.5rem; 
+}
 
 .forecast-card {
   background: rgba(15, 23, 42, 0.6);
@@ -305,14 +309,13 @@ body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo
   background: rgba(30, 41, 59, 0.8);
 }
 
-/* MENAMPILKAN WARNA ASLI GAMBAR IKON TANPA MANIPULASI FILTER */
 .temp-box img,
 .forecast-card img {
   width: 64px;
   height: 64px;
   object-fit: contain;
   -webkit-filter: none;
-   filter: none;
+  filter: none;
 }
 
 .forecast-day { font-size: 0.75rem; color: #cbd5e1; font-weight: 600; }
@@ -350,28 +353,109 @@ body.theme-atmosphere { background-image: url('https://images.unsplash.com/photo
 .error-box { color: #f87171; }
 .hidden { display: none !important; }
 
-/* MEDIA QUERIES MOBILE */
-@media (max-width: 680px) {
+/* ============================================
+   MEDIA QUERIES MOBILE & TABLET RESPONSIVE FIX
+   ============================================ */
+
+@media (max-width: 768px) {
   .header-container {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
     gap: 0.75rem;
   }
-  
+
+  .brand {
+    order: 1;
+  }
+
+  .unit-toggle {
+    order: 2;
+  }
+
   .search-form-wrapper {
+    order: 3;
     max-width: 100%;
     width: 100%;
   }
 
   .weather-layout-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .weather-main-col {
     padding-right: 0;
     border-right: none;
-    padding-bottom: 1rem;
+    padding-bottom: 1.25rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .forecast-container {
+    grid-template-columns: repeat(5, 1fr);
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-viewport {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .app-container {
+    padding: 1.25rem 0.75rem;
+    border-radius: 16px;
+  }
+
+  /* TETAP 3 KOLOM KE SAMPING DI HP */
+  .weather-details {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+    padding: 0.75rem 0.4rem;
+  }
+
+  .detail-item {
+    flex-direction: column; /* Icon & teks disusun vertikal ringkas agar muat 3 kolom */
+    text-align: center;
+    gap: 0.25rem;
+  }
+
+  .detail-item i {
+    font-size: 1.1rem;
+  }
+
+  .detail-label {
+    font-size: 0.62rem;
+    line-height: 1.1;
+  }
+
+  .detail-val {
+    font-size: 0.78rem;
+  }
+
+  .forecast-container {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.25rem;
+  }
+
+  .forecast-card {
+    padding: 0.5rem 0.1rem;
+    min-height: 90px;
+  }
+
+  .forecast-card img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .forecast-day {
+    font-size: 0.7rem;
+  }
+
+  .forecast-temp {
+    font-size: 0.75rem;
+  }
+
+  .temp-value {
+    font-size: 2.5rem;
   }
 }
