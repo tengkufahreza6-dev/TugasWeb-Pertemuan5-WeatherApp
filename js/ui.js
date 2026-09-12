@@ -1,6 +1,9 @@
 // ============================================
-// UI MODULE - DOM MANIPULATION & RENDER
+// UI MODULE - DOM MANIPULATION, MAP & RENDER
 // ============================================
+
+let map = null;
+let mapMarker = null;
 
 const elements = {
   weatherCard: document.getElementById('weather-card'),
@@ -16,6 +19,9 @@ const elements = {
   humidity: document.getElementById('humidity'),
   windSpeed: document.getElementById('wind-speed'),
   feelsLike: document.getElementById('feels-like'),
+  pressure: document.getElementById('pressure'),
+  visibility: document.getElementById('visibility'),
+  sunTimes: document.getElementById('sun-times'),
   historyContainer: document.getElementById('history-container'),
   historyTags: document.getElementById('history-tags')
 };
@@ -36,6 +42,13 @@ const showError = (message) => {
 const formatDate = () => {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   return new Date().toLocaleDateString('id-ID', options);
+};
+
+const formatTime = (timestamp) => {
+  return new Date(timestamp * 1000).toLocaleTimeString('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 };
 
 const updateDynamicBackground = (weatherMain) => {
@@ -59,19 +72,41 @@ const updateDynamicBackground = (weatherMain) => {
   }
 };
 
-// Render Data Cuaca Utama
+// Inisialisasi & Update Peta Interaktif Leaflet.js
+const renderMap = (lat, lon, cityName) => {
+  if (!map) {
+    map = L.map('map', { zoomControl: false }).setView([lat, lon], 11);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    mapMarker = L.marker([lat, lon]).addTo(map);
+  } else {
+    map.setView([lat, lon], 11);
+    mapMarker.setLatLng([lat, lon]);
+  }
+  
+  mapMarker.bindPopup(`<b>${cityName}</b>`).openPopup();
+
+  // Memastikan peta di-render sempurna tanpa pecahan ubin (tile rendering fix)
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 200);
+};
+
+// Render Data Cuaca Utama & Parameter Tambahan
 const renderWeather = (data, unit) => {
-  const { name, sys, main, weather, wind } = data;
+  const { name, sys, main, weather, wind, coord, visibility } = data;
   const unitSymbol = unit === 'metric' ? '°C' : '°F';
   const windUnit = unit === 'metric' ? 'm/s' : 'mph';
 
   elements.cityName.textContent = `${name}, ${sys.country}`;
   elements.weatherDate.textContent = formatDate();
   
-  // Menggunakan CDN ikon resmi dengan warna asli
   elements.weatherIcon.src = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
   elements.weatherIcon.alt = weather[0].description;
-  elements.weatherIcon.className = ''; // Hapus kelas pencerah yang membuat ikon putih polos
+  elements.weatherIcon.className = '';
 
   elements.temperature.textContent = Math.round(main.temp);
   elements.tempUnit.textContent = unitSymbol;
@@ -80,7 +115,13 @@ const renderWeather = (data, unit) => {
   elements.windSpeed.textContent = `${wind.speed} ${windUnit}`;
   elements.feelsLike.textContent = `${Math.round(main.feels_like)}${unitSymbol}`;
 
+  // Parameter Tambahan Baru
+  elements.pressure.textContent = `${main.pressure} hPa`;
+  elements.visibility.textContent = `${(visibility / 1000).toFixed(1)} km`;
+  elements.sunTimes.textContent = `${formatTime(sys.sunrise)} / ${formatTime(sys.sunset)}`;
+
   updateDynamicBackground(weather[0].main);
+  renderMap(coord.lat, coord.lon, `${name}, ${sys.country}`);
 
   elements.loadingSpinner.classList.add('hidden');
   elements.errorMessage.classList.add('hidden');
@@ -107,7 +148,6 @@ const renderHistory = (historyList, onSelectCity) => {
   });
 };
 
-// Render Forecast 5 Hari dengan Struktur Flexbox Terkunci
 const renderForecast = (forecastData, unit) => {
   const forecastContainer = document.getElementById('forecast-container');
   const unitSymbol = unit === 'metric' ? '°C' : '°F';
